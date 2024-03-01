@@ -3,13 +3,14 @@ import TodoItem from "./TodoItem";
 import NoTodo from "./NoTodo";
 import { AnimatePresence } from "framer-motion";
 import { TodoContext } from "../../context/TodoContextProvider";
+import TodoLoader from "./TodoLoader";
 
 export default function TodoList(): React.JSX.Element {
-  const { todos } = useContext(TodoContext);
+  const { todos, isLoading } = useContext(TodoContext);
   return (
     <div>
       {todos.length === 0 ? (
-        <NoTodo />
+        <>{isLoading ? <TodoLoader /> : <NoTodo />}</>
       ) : (
         <ul role="list" className="divide-y divide-gray-100">
           <AnimatePresence>

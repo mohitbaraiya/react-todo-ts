@@ -9,12 +9,14 @@ interface DefaultTodocontextValue {
   addTodo: (todoDetail: Todo) => Promise<void>;
   toggleTodoStatus: (id: string, completed: boolean) => void;
   removeTodo: (id: string) => void;
+  isLoading: boolean;
 }
 const defaultcontextValue: DefaultTodocontextValue = {
   todos: [],
   addTodo: async () => {},
   toggleTodoStatus: () => {},
   removeTodo: () => {},
+  isLoading: false,
 };
 export const TodoContext = React.createContext(defaultcontextValue);
 
@@ -25,28 +27,35 @@ export default function TodoContextProvider({
 }): React.JSX.Element {
   // states
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [ip, setIp] = useState<string>("");
   //   effects
   // fetch Ip address
   useEffect(() => {
-    (async function (setIp) {
-      const res = await axios.get("https://ipinfo.io/json");
-      if (typeof res.data.ip === "string") {
-        setIp(res.data.ip);
-      }
-    })(setIp);
-  }, []);
+    (async function (setIp, setTodos) {
+      try {
+        setIsLoading(true);
 
-  // fetch todos from firebase
-  useEffect(() => {
-    (async function (setTodos, ip) {
-      if (!ip) {
-        return;
+        const res = await axios.get("https://ipinfo.io/json");
+        if (typeof res.data.ip === "string") {
+          setIp(res.data.ip);
+
+          if (!res.data.ip) {
+            setIsLoading(false);
+
+            return;
+          }
+          setIsLoading(true);
+          const todos = await getTodos(res.data.ip);
+          setTodos(todos);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
       }
-      const todos = await getTodos();
-      setTodos(todos);
-    })(setTodos, ip);
-  }, [ip]);
+    })(setIp, setTodos);
+  }, []);
 
   //   methods
   //   add todo
@@ -76,6 +85,7 @@ export default function TodoContextProvider({
     addTodo: addTodo,
     toggleTodoStatus: toggleTodoStatus,
     removeTodo: removeTodo,
+    isLoading: isLoading,
   };
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 }
