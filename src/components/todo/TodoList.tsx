@@ -17,14 +17,7 @@ export default function TodoList({
       ) : (
         <ul role="list" className="divide-y divide-gray-100">
           {todos.map((todo) => (
-            <TodoItem
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 100 }}
-              todo={todo}
-              key={todo.id}
-              setTodos={setTodos}
-            />
+            <TodoItem todo={todo} key={todo.id} setTodos={setTodos} />
           ))}
         </ul>
       )}
