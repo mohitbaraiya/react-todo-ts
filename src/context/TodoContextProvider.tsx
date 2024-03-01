@@ -63,7 +63,7 @@ export default function TodoContextProvider({
     if (ip) {
       todoDetail.id = await addTodos(todoDetail, ip);
     }
-    setTodos((prevTodo) => [...prevTodo, todoDetail]);
+    setTodos((prevTodo) => [todoDetail, ...prevTodo]);
   }
   //   toggle todo complete status
   function toggleTodoStatus(id: string, completed: boolean) {

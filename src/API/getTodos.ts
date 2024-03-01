@@ -1,17 +1,10 @@
-import {
-  collection,
-  getDocs,
-  orderBy,
-  query,
-  where,
-} from "@firebase/firestore";
+import { getDocs, orderBy, query, where } from "@firebase/firestore";
 import { Todo } from "../components/todo/types";
-import { db } from "../config/firebase";
+import { todoRef } from "../config/firebase/db";
 
 export default async function getTodos(ip: string): Promise<Todo[]> {
   const todos: Todo[] = [];
   try {
-    const todoRef = collection(db, "todos");
     const todoSnap = await getDocs(
       query(todoRef, where("ip", "==", ip), orderBy("createdAt", "desc"))
     );
@@ -19,7 +12,6 @@ export default async function getTodos(ip: string): Promise<Todo[]> {
     if (todoSnap) {
       todoSnap.forEach((todo) => {
         const todoDetail = todo.data();
-
         todos.push({
           id: todo?.id,
           name: todoDetail?.name,

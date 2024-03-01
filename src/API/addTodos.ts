@@ -1,21 +1,21 @@
-import { collection, doc, setDoc } from "@firebase/firestore";
+import { setDoc } from "@firebase/firestore";
 import { Todo } from "../components/todo/types";
-import { db } from "../config/firebase";
+import { todosDocRef } from "../config/firebase/db";
 
 export default async function addTodos(
   todo: Todo,
   ip: string
 ): Promise<string> {
+  const todoRef = todosDocRef();
   try {
-    const newTodoRef = doc(collection(db, "todos"));
-    await setDoc(newTodoRef, {
+    await setDoc(todoRef, {
       name: todo.name,
       completed: todo.completed,
       createdAt: todo.createdAt,
       ip: ip,
     });
 
-    return newTodoRef.id;
+    return todoRef.id;
   } catch (error) {
     console.log(error);
   }

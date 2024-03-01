@@ -1,7 +1,12 @@
-import { DocumentReference, doc, DocumentData } from "@firebase/firestore";
+import {
+  DocumentReference,
+  doc,
+  DocumentData,
+  collection,
+} from "@firebase/firestore";
 import { db } from "./index";
-export const todosRef: DocumentReference<DocumentData, DocumentData> = doc(
-  db,
-  "todos",
-  "h7CKNR7CyBYyZrVKMDNf"
-);
+export const todoRef = collection(db, "todos");
+export const todosDocRef: () => DocumentReference<
+  DocumentData,
+  DocumentData
+> = () => doc(todoRef);
