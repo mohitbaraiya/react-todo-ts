@@ -24,7 +24,9 @@ export default function TodoForm(): React.JSX.Element {
     }
   }
 
-  function submitTodoForm(event: React.FormEvent<HTMLFormElement>) {
+  async function submitTodoForm(
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     event.preventDefault();
     setIsFormLoading(true);
     if (setError(todoName, setTodoNameError)) {
@@ -37,12 +39,14 @@ export default function TodoForm(): React.JSX.Element {
       completed: false,
       createdAt: new Date().toUTCString(),
     };
-    addTodo(todoDetail);
+    await addTodo(todoDetail);
     setIsFormLoading(false);
     setTodoName("");
   }
 
-  function todoNameChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
+  function todoNameChangeHandler(
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void {
     const value = event.target.value;
     setTodoName(value);
     setError(value, setTodoNameError);
@@ -89,7 +93,7 @@ export default function TodoForm(): React.JSX.Element {
               cy="12"
               r="10"
               stroke="currentColor"
-              stroke-width="4"
+              strokeWidth="4"
             ></circle>
             <path
               className="opacity-75"

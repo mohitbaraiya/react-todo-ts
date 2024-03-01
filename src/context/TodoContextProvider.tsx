@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Todo } from "../components/todo/types";
 import axios from "axios";
 import getTodos from "../API/getTodos";
+import addTodos from "../API/addTodos";
 
 interface DefaultTodocontextValue {
   todos: Todo[];
-  addTodo: (todoDetail: Todo) => void;
+  addTodo: (todoDetail: Todo) => Promise<void>;
   toggleTodoStatus: (id: string, completed: boolean) => void;
   removeTodo: (id: string) => void;
 }
 const defaultcontextValue: DefaultTodocontextValue = {
   todos: [],
-  addTodo: () => {},
+  addTodo: async () => {},
   toggleTodoStatus: () => {},
   removeTodo: () => {},
 };
@@ -49,7 +50,10 @@ export default function TodoContextProvider({
 
   //   methods
   //   add todo
-  function addTodo(todoDetail: Todo): void {
+  async function addTodo(todoDetail: Todo): Promise<void> {
+    if (ip) {
+      todoDetail.id = await addTodos(todoDetail, ip);
+    }
     setTodos((prevTodo) => [...prevTodo, todoDetail]);
   }
   //   toggle todo complete status
