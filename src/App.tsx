@@ -12,7 +12,7 @@ function App(): React.JSX.Element {
           <TodoForm setTodos={setTodos} />
         </div>
         <div className="mt-2">
-          <TodoList todos={todos} />
+          <TodoList todos={todos} setTodos={setTodos} />
         </div>
       </div>
     </>

@@ -3,6 +3,6 @@
 @tailwind utilities;
 @tailwind variants;
 
-body {
+/* body {
   @apply bg-[#c8e9f8];
-}
+} */

@@ -39,7 +39,9 @@ export default function TodoForm({
     };
     setTodos((prevTodo) => [...prevTodo, todoDetail]);
     setIsFormLoading(false);
+    setTodoName("");
   }
+
   function todoNameChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     setTodoName(value);
