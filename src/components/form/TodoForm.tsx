@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import cn from "classnames";
-export default function TodoForm(): React.JSX.Element {
+import { Todo } from "../todo/types";
+export default function TodoForm({
+  setTodos,
+}: {
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+}): React.JSX.Element {
   // states
   const [todoName, setTodoName] = useState<string>("");
   const [todoNameError, setTodoNameError] = useState<string>("");
@@ -26,6 +31,13 @@ export default function TodoForm(): React.JSX.Element {
       setIsFormLoading(false);
       return;
     }
+    const todoDetail: Todo = {
+      name: todoName,
+      id: Date.now().toString(),
+      completed: false,
+      createdAt: new Date().toUTCString(),
+    };
+    setTodos((prevTodo) => [...prevTodo, todoDetail]);
     setIsFormLoading(false);
   }
   function todoNameChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {

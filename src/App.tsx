@@ -9,10 +9,10 @@ function App(): React.JSX.Element {
     <>
       <div className="container">
         <div className="mt-2">
-          <TodoForm />
+          <TodoForm setTodos={setTodos} />
         </div>
         <div className="mt-2">
-          <TodoList />
+          <TodoList todos={todos} />
         </div>
       </div>
     </>
