@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import cn from "classnames";
 import { Todo } from "../todo/types";
-export default function TodoForm({
-  setTodos,
-}: {
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}): React.JSX.Element {
+import { TodoContext } from "../../context/TodoContextProvider";
+export default function TodoForm(): React.JSX.Element {
   // states
   const [todoName, setTodoName] = useState<string>("");
   const [todoNameError, setTodoNameError] = useState<string>("");
   const [isFormLoading, setIsFormLoading] = useState<boolean>(false);
+
+  // context
+  const { addTodo } = useContext(TodoContext);
   // methods
   function setError(
     todoName: string,
@@ -37,7 +37,7 @@ export default function TodoForm({
       completed: false,
       createdAt: new Date().toUTCString(),
     };
-    setTodos((prevTodo) => [...prevTodo, todoDetail]);
+    addTodo(todoDetail);
     setIsFormLoading(false);
     setTodoName("");
   }

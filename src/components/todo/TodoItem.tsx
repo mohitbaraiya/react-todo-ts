@@ -1,40 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Todo } from "./types";
 import classNames from "classnames";
 import { motion } from "framer-motion";
+import { TodoContext } from "../../context/TodoContextProvider";
 
-export default function TodoItem({
-  todo,
-  setTodos,
-}: {
-  todo: Todo;
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}): React.JSX.Element {
+export default function TodoItem({ todo }: { todo: Todo }): React.JSX.Element {
+  // context
+  const { toggleTodoStatus, removeTodo } = useContext(TodoContext);
+
   // method
   //   complete and incomplete todo
   function toggleTodoCompleteStatus(
     id: string,
-    setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
     event: React.ChangeEvent<HTMLInputElement>
   ) {
     const completed = event.target.checked;
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (id === todo.id) {
-          todo.completed = completed;
-        }
-        return todo;
-      });
-    });
+    toggleTodoStatus(id, completed);
   }
   //   remove todo
 
-  function removeTodoItem(
-    id: string,
-    setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-  ) {
-    setTodos((todos) => todos.filter((todo) => todo.id !== id));
-  }
   return (
     <motion.li
       initial={{ opacity: 0, y: -20 }}
@@ -51,7 +35,7 @@ export default function TodoItem({
           id={`todo_${todo.id}`}
           checked={todo.completed}
           name={`todo_${todo.id}`}
-          onChange={toggleTodoCompleteStatus.bind(null, todo.id, setTodos)}
+          onChange={toggleTodoCompleteStatus.bind(null, todo.id)}
         />
         <label
           className="flex items-center px-2 rounded cursor-pointer hover:bg-gray-100"
@@ -85,7 +69,7 @@ export default function TodoItem({
           </p>
         </label>
       </div>
-      <button onClick={removeTodoItem.bind(null, todo.id, setTodos)}>
+      <button onClick={removeTodo.bind(null, todo.id)}>
         <svg
           className="w-4 h-4 fill-current"
           xmlns="http://www.w3.org/2000/svg"

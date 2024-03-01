@@ -1,16 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import TodoItem from "./TodoItem";
-import { Todo } from "./types";
 import NoTodo from "./NoTodo";
 import { AnimatePresence } from "framer-motion";
+import { TodoContext } from "../../context/TodoContextProvider";
 
-export default function TodoList({
-  todos,
-  setTodos,
-}: {
-  todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}): React.JSX.Element {
+export default function TodoList(): React.JSX.Element {
+  const { todos } = useContext(TodoContext);
   return (
     <div>
       {todos.length === 0 ? (
@@ -19,7 +14,7 @@ export default function TodoList({
         <ul role="list" className="divide-y divide-gray-100">
           <AnimatePresence>
             {todos.map((todo) => (
-              <TodoItem todo={todo} key={todo.id} setTodos={setTodos} />
+              <TodoItem todo={todo} key={todo.id} />
             ))}
           </AnimatePresence>
         </ul>
