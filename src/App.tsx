@@ -8,7 +8,7 @@ function App(): React.JSX.Element {
   return (
     <>
       <div className="container">
-        <div className="mt-2">
+        <div className="sticky top-0 z-10 mt-2 bg-white">
           <TodoForm setTodos={setTodos} />
         </div>
         <div className="mt-2">
