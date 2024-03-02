@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Todo } from "../components/todo/types";
-import axios from "axios";
+// import axios from "axios";
+import { v4 } from "uuid";
 import getTodos from "../API/getTodos";
 import addTodos from "../API/addTodos";
 
@@ -28,7 +29,14 @@ export default function TodoContextProvider({
   // states
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [ip, setIp] = useState<string>("");
+
+  const [ip, setIp] = useState<string>(localStorage.getItem("uuid") || "");
+  useEffect(() => {
+    if (ip) {
+      localStorage.setItem("uuid", ip);
+    }
+  }, [ip]);
+
   //   effects
   // fetch Ip address
   useEffect(() => {
@@ -36,17 +44,21 @@ export default function TodoContextProvider({
       try {
         setIsLoading(true);
 
-        const res = await axios.get("https://ipinfo.io/json");
-        if (typeof res.data.ip === "string") {
-          setIp(res.data.ip);
+        let uuid = ip;
+        if (!ip) {
+          uuid = v4();
+        }
+        // const res = await axios.get("https://ipinfo.io/json");
+        if (typeof uuid === "string") {
+          setIp(uuid);
 
-          if (!res.data.ip) {
-            setIsLoading(false);
+          // if (!res.data.ip) {
+          //   setIsLoading(false);
 
-            return;
-          }
+          //   return;
+          // }
           setIsLoading(true);
-          const todos = await getTodos(res.data.ip);
+          const todos = await getTodos(uuid);
           setTodos(todos);
           setIsLoading(false);
         }
@@ -55,7 +67,7 @@ export default function TodoContextProvider({
         console.log(error);
       }
     })(setIp, setTodos);
-  }, []);
+  }, [ip]);
 
   //   methods
   //   add todo
